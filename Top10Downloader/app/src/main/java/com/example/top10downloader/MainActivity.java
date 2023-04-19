@@ -3,8 +3,11 @@ package com.example.top10downloader;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.BufferedReader;
@@ -31,12 +34,23 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: done");
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.feed_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
+
     private class DownloadData extends AsyncTask<String,Void,String>{
         private static final String TAG = "DownloadData";
         @Override
         protected void onPostExecute(String s){
             super.onPostExecute(s);
-            Log.d(TAG, "onPostExecute: parameter is " + s);
+            //Log.d(TAG, "onPostExecute: parameter is " + s);
             ParseApplications parseApplications = new ParseApplications();
             parseApplications.parse(s);
 
