@@ -3,7 +3,6 @@ package com.example.top10downloader;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        listApps = (ListView) findViewById(R.id.xmlListView);
+        listApps = findViewById(R.id.xmlListView);
 
         Log.d(TAG, "onCreate: starting Asynctask");
         DownloadData downloadData = new DownloadData();
@@ -41,8 +40,11 @@ public class MainActivity extends AppCompatActivity {
             ParseApplications parseApplications = new ParseApplications();
             parseApplications.parse(s);
 
-            ArrayAdapter<FeedEntry> arrayAdapter = new ArrayAdapter<>(MainActivity.this, R.layout.list_item, parseApplications.getApplications());
-            listApps.setAdapter(arrayAdapter);
+//            ArrayAdapter<FeedEntry> arrayAdapter = new ArrayAdapter<>(MainActivity.this, R.layout.list_item, parseApplications.getApplications());
+//            listApps.setAdapter(arrayAdapter);
+            FeedAdapter feedAdapter = new FeedAdapter(MainActivity.this,R.layout.list_record,
+                    parseApplications.getApplications());
+            listApps.setAdapter(feedAdapter);
         }
 
         @Override
@@ -66,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 int response = connection.getResponseCode();
                 Log.d(TAG, "downloadXML: The response was " + response);
                 // to read from input stream which connection provides
+
                 //InputStream inputStream = connection.getInputStream();
                 // BufferedReader buffers the data coming from the stream
                 //InputStreamReader inputStreamReader = new InputStreamReader(inputStream);

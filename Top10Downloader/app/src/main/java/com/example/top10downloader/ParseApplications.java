@@ -59,7 +59,7 @@ public class ParseApplications {
                             }else if ("releaseDate".equalsIgnoreCase(tagName)){
                                 currentRecord.setReleaseDate(textValue);
                             }else if("summary".equalsIgnoreCase(tagName)) {
-                                currentRecord.setImageURL(textValue);
+                                currentRecord.setSummary(textValue);
                             } else if("image".equalsIgnoreCase(tagName)) {
                                 currentRecord.setImageURL(textValue);
                             }
