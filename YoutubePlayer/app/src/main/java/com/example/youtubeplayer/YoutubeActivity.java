@@ -33,13 +33,10 @@ public class YoutubeActivity extends AppCompatActivity {
     }
 
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_youtube);
 
-        ConstraintLayout layout = (ConstraintLayout) getLayoutInflater().inflate(R.layout.activity_youtube, null);
-        setContentView(layout);
-        webview = new WebView(this);
-        setContentView(webview);
+        webview = findViewById(R.id.web_view);
 
         final WebSettings settings = webview.getSettings();
         settings.setJavaScriptEnabled(true);
