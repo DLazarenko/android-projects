@@ -11,7 +11,6 @@ import android.webkit.WebView;
 public class YoutubeActivity extends AppCompatActivity {
 
     private WebView webview;
-    public boolean flag = false;
 
     @Override
     protected void onPause() {
