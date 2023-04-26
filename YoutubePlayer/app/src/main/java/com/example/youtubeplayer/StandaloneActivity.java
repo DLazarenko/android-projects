@@ -1,5 +1,6 @@
 package com.example.youtubeplayer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +25,17 @@ public class StandaloneActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View view) {
+        Intent intent = new Intent(this, YoutubeActivity.class);
 
+        switch (view.getId()){
+            case R.id.btnPlayVideo:
+                intent.putExtra("isVideo", true);
+                break;
+            case R.id.btnPlayList:
+                intent.putExtra("isVideo", false);
+                break;
+            default:
+        }
+        startActivity(intent);
     }
 }

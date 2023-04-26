@@ -11,6 +11,7 @@ import android.webkit.WebView;
 public class YoutubeActivity extends AppCompatActivity {
 
     private WebView webview;
+    public boolean flag = false;
 
     @Override
     protected void onPause() {
@@ -20,9 +21,17 @@ public class YoutubeActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        webview.onResume();
         super.onResume();
+        boolean isVideo = getIntent().getBooleanExtra("isVideo", true);
+        webview.onResume();
+        webview.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                webview.evaluateJavascript("loadVideo("+isVideo+");", null);
+            }
+        }, 5000);
     }
+
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
