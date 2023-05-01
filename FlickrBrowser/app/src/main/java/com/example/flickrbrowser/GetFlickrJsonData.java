@@ -3,6 +3,11 @@ package com.example.flickrbrowser;
 import android.net.Uri;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 class GetFlickrJsonData implements GetRawData.OnDownloadComplete {
@@ -15,10 +20,6 @@ class GetFlickrJsonData implements GetRawData.OnDownloadComplete {
 
     private final OnDataAvailable mCallBack;
 
-    @Override
-    public void onDownloadComplete(String data, DownloadStatus status) {
-
-    }
 
     interface OnDataAvailable {
         void onDataAvailable(List<Photo> data, DownloadStatus status);
@@ -52,4 +53,47 @@ class GetFlickrJsonData implements GetRawData.OnDownloadComplete {
                 .appendQueryParameter("nojasoncallback", "1")
                 .build().toString();
     }
+
+    @Override
+    public void onDownloadComplete(String data, DownloadStatus status) {
+        Log.d(TAG, "onDownloadComplete starts. Status = " + status);
+
+        if(status == DownloadStatus.OK) {
+            mPhotoList = new ArrayList<>();
+
+            try {
+                JSONObject jsonData = new JSONObject(data);
+                JSONArray itemsArray = jsonData.getJSONArray("items");
+                for (int i = 0; i < itemsArray.length(); i++) {
+                    JSONObject jsonPhoto = itemsArray.getJSONObject(i);
+                    String title = jsonPhoto.getString("title");
+                    String author = jsonPhoto.getString("author");
+                    String authorId = jsonPhoto.getString("author_id");
+                    String tags = jsonPhoto.getString("tags");
+
+                    JSONObject jsonMedia = jsonPhoto.getJSONObject("media");
+                    String photoUrl = jsonMedia.getString("m");
+
+                    String link = photoUrl.replaceFirst("_m.", "_b.");
+
+                    Photo photoObject = new Photo(title, author, authorId, link, tags, photoUrl);
+                    mPhotoList.add(photoObject);
+
+                    Log.d(TAG, "onDownloadComplete " + photoObject.toString());
+
+                }
+            }catch(JSONException jsone){
+                jsone.printStackTrace();;
+                Log.e(TAG, "onDownloadComplete: Error processing Json data " + jsone.getMessage());
+                status = DownloadStatus.FAILED_OR_EMPTY;
+            }
+        }
+        if(mCallBack != null){
+            // now inform the caller that processing is done - possibly returning null
+            // if there was an error
+            mCallBack.onDataAvailable(mPhotoList, status);
+        }
+        Log.d(TAG, "onDownloadComplete ends");
+    }
+
 }
