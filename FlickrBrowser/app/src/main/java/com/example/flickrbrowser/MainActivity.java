@@ -1,10 +1,9 @@
 package com.example.flickrbrowser;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -16,7 +15,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements GetFlickrJsonData.OnDataAvailable,
+public class MainActivity extends BaseActivity implements GetFlickrJsonData.OnDataAvailable,
                     RecyclerItemClickListener.OnRecyclerClickListener
 {
     private static final String TAG = "MainActivity";
@@ -27,8 +26,8 @@ public class MainActivity extends AppCompatActivity implements GetFlickrJsonData
         Log.d(TAG, "onCreate: starts");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
+
+        activateToolbar(false);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -38,8 +37,6 @@ public class MainActivity extends AppCompatActivity implements GetFlickrJsonData
         mFlickrRecyclerViewAdapter = new FlickrRecyclerViewAdapter(this, new ArrayList<Photo>());
         recyclerView.setAdapter(mFlickrRecyclerViewAdapter);
 
-//        GetRawData getRawData = new GetRawData(this);
-//        getRawData.execute("https://www.flickr.com/services/feeds/photos_public.gne?tags=android,nougat,sdk&tagmode=any&format=json&nojsoncallback=1");
         Log.d(TAG, "onCreate: ends");
     }
 
@@ -49,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements GetFlickrJsonData
         super.onResume();
         GetFlickrJsonData getFlickrJsonData = new GetFlickrJsonData(this, "https://www.flickr.com/services/feeds/photos_public.gne", "en-us", true);
         //getFlickrJsonData.executeOnSameThread("android, nougat");
-        getFlickrJsonData.execute("android, nougat");
+        getFlickrJsonData.execute("sky");
     }
 
     @Override
@@ -89,6 +86,10 @@ public class MainActivity extends AppCompatActivity implements GetFlickrJsonData
     @Override
     public void onItemLongClick(View view, int position) {
         Log.d(TAG, "onItemLongClick: starts");
-        Toast.makeText(MainActivity.this, "Long tap at position " + position, Toast.LENGTH_SHORT).show();
+//      Toast.makeText(MainActivity.this, "Long tap at position " + position, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, PhotoDetailActivity.class);
+
+        intent.putExtra(PHOTO_TRANSFER, mFlickrRecyclerViewAdapter. getPhoto(position));
+        startActivity(intent);
     }
 }
