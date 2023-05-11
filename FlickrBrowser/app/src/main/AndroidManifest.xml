@@ -9,12 +9,12 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:theme="@style/Theme.FlickrBrowser"
         tools:targetApi="31">
+
         <activity
             android:name=".MainActivity"
-            android:exported="true"
-            android:theme="@style/Theme.FlickrBrowser"
-            >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -23,8 +23,7 @@
         <activity
             android:name=".SearchActivity"
             android:label="Search Activity"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/Theme.FlickrBrowser">
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.flickrbrowser.MainActivity"/>
@@ -32,8 +31,7 @@
         <activity
             android:name=".PhotoDetailActivity"
             android:label="Photo Detail"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/Theme.FlickrBrowser"/>
+            android:parentActivityName=".MainActivity"/>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.flickrbrowser.MainActivity"/>
