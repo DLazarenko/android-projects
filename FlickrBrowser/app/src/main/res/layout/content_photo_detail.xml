@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="@color/design_default_color_on_primary"
             app:cardCornerRadius="8dp">
 
             <LinearLayout
@@ -31,6 +32,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
+                    android:textColor="@color/secondary_text"
                     android:text="TextView" />
 
                 <ImageView
@@ -46,12 +48,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:text="TextView" />
+                    android:textColor="@color/secondary_text"
+                    android:text="TextView"/>
 
                 <TextView
                     android:id="@+id/photo_tags"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/secondary_text"
                     android:text="TextView" />
 
             </LinearLayout>
