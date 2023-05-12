@@ -32,7 +32,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:text="TextView" />
+                    android:text="@string/textview" />
 
                 <ImageView
                     android:id="@+id/photo_image"
@@ -40,6 +40,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:adjustViewBounds="true"
+                    android:contentDescription="@string/browse_image_description"
                     android:scaleType="fitCenter"
                     app:srcCompat="@drawable/placeholder" />
 
@@ -48,14 +49,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:text="TextView"/>
+                    android:text="@string/textview" />
 
                 <TextView
                     android:id="@+id/photo_tags"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:text="TextView" />
+                    android:text="@string/textview" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
