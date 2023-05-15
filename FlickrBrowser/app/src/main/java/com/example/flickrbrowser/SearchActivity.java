@@ -36,9 +36,10 @@ public class SearchActivity extends BaseActivity {
         SearchableInfo searchableInfo = searchManager.getSearchableInfo(getComponentName());
         mSearchView.setSearchableInfo(searchableInfo);
 
-        Log.d(TAG, "onCreateOptionsMenu: " + getComponentName().toString());
-        Log.d(TAG, "onCreateOptionsMenu: hint is" + mSearchView.getQueryHint());
-        Log.d(TAG, "onCreateOptionsMenu: searchable info is " + searchableInfo.toString());
+
+//        Log.d(TAG, "onCreateOptionsMenu: " + getComponentName().toString());
+//        Log.d(TAG, "onCreateOptionsMenu: hint is" + mSearchView.getQueryHint());
+//        Log.d(TAG, "onCreateOptionsMenu: searchable info is " + searchableInfo.toString());
 
         mSearchView.setIconified(false);
 
@@ -48,6 +49,7 @@ public class SearchActivity extends BaseActivity {
                 Log.d(TAG, "onQueryTextSubmit: called");
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 sharedPreferences.edit().putString(FLICKR_QUERY, query).apply();
+                mSearchView.clearFocus();
                 finish();
                 return true;
             }

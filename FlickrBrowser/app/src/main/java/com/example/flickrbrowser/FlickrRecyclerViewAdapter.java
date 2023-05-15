@@ -39,20 +39,25 @@ class FlickrRecyclerViewAdapter extends RecyclerView.Adapter<FlickrRecyclerViewA
     public void onBindViewHolder(@NonNull FlickrImageViewHolder holder, int position) {
         //calls by a RecyclerView when it wants new data to be stored in (an existing row) a ViewHolder
 
-        Photo photoItem = mPhotosList.get(position);
-        Log.d(TAG, "onBindViewHolder: " + photoItem.getTitle() + " ---> " + position);
-        Picasso.get().load(photoItem.getImage())
-                .error(R.drawable.placeholder)
-                .placeholder(R.drawable.placeholder)
-                .into(holder.thumbnail);
+        if((mPhotosList == null) || (mPhotosList.size() == 0)){
+               holder.thumbnail.setImageResource(R.drawable.placeholder);
+               holder.title.setText(R.string.empty_photo);
+        }else {
+            Photo photoItem = mPhotosList.get(position);
+            Log.d(TAG, "onBindViewHolder: " + photoItem.getTitle() + " ---> " + position);
+            Picasso.get().load(photoItem.getImage())
+                    .error(R.drawable.placeholder)
+                    .placeholder(R.drawable.placeholder)
+                    .into(holder.thumbnail);
 
-        holder.title.setText(photoItem.getTitle());
+            holder.title.setText(photoItem.getTitle());
+        }
     }
 
     @Override
     public int getItemCount() {
 //      Log.d(TAG, "getItemCount: called");
-        return ((mPhotosList != null) && (mPhotosList.size() != 0) ? mPhotosList.size() : 0);
+        return ((mPhotosList != null) && (mPhotosList.size() != 0) ? mPhotosList.size() : 1);
     }
 
     @SuppressLint("NotifyDataSetChanged")

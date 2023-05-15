@@ -9,4 +9,5 @@
     <string name="searchable_hint">Enter photo tags</string>
     <string name="title_activity_search">Search Activity</string>
     <string name="title_activity_photo_detail">Photo Detail</string>
+    <string name="empty_photo">No photos match your search.\n\nUse the search icon to search for photos</string>
 </resources>
