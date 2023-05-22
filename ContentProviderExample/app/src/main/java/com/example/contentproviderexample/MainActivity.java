@@ -1,5 +1,6 @@
 package com.example.contentproviderexample;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -21,7 +22,11 @@ import com.example.contentproviderexample.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -46,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
         binding.fab.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("Range")
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "fab onClick: starts");
@@ -56,6 +62,17 @@ public class MainActivity extends AppCompatActivity {
                         null,
                         null,
                         ContactsContract.Contacts.DISPLAY_NAME_PRIMARY);
+
+                if(cursor != null){
+                    List<String> contacts = new ArrayList<>();
+                    while(cursor.moveToNext()) {
+                        contacts.add(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY)));
+                    }
+                    cursor.close();
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.this, R.layout.contact_detail, R.id.name, contacts);
+                    contactNames.setAdapter(adapter);
+                }
+                Log.d(TAG, "fab onClick: ends");
             }
         });
     }
