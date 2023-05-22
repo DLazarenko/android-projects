@@ -1,18 +1,21 @@
 package com.example.contentproviderexample;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.os.Bundle;
-
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -20,20 +23,16 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.contentproviderexample.databinding.ActivityMainBinding;
 
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private AppBarConfiguration appBarConfiguration;
+    private ActivityMainBinding binding;
+
     private static final String TAG = "MainActivity";
     private ListView contactNames;
 
-    private AppBarConfiguration appBarConfiguration;
-    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +43,11 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.toolbar);
 
-        contactNames = (ListView) findViewById(R.id.contact_names);
-
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
+        contactNames = (ListView) findViewById(R.id.contact_names);
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("Range")
             @Override
@@ -63,18 +61,20 @@ public class MainActivity extends AppCompatActivity {
                         null,
                         ContactsContract.Contacts.DISPLAY_NAME_PRIMARY);
 
-                if(cursor != null){
+                if (cursor != null) {
                     List<String> contacts = new ArrayList<>();
-                    while(cursor.moveToNext()) {
+                    while (cursor.moveToNext()) {
                         contacts.add(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY)));
                     }
                     cursor.close();
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.this, R.layout.contact_detail, R.id.name, contacts);
                     contactNames.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
                 }
                 Log.d(TAG, "fab onClick: ends");
             }
         });
+        ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_CONTACTS}, 1);
     }
 
     @Override
