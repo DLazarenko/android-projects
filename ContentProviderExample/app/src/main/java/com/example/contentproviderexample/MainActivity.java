@@ -3,6 +3,7 @@ package com.example.contentproviderexample;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -16,6 +17,7 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -26,12 +28,15 @@ import com.example.contentproviderexample.databinding.ActivityMainBinding;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.Manifest.permission.READ_CONTACTS;
+
 public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
 
     private static final String TAG = "MainActivity";
     private ListView contactNames;
+    private static boolean READ_CONTACTS_GRANTED = false;
 
 
     @Override
@@ -48,6 +53,17 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
         contactNames = (ListView) findViewById(R.id.contact_names);
+
+        int hasReadContactPermission = ContextCompat.checkSelfPermission(this, READ_CONTACTS);
+        Log.d(TAG, "onCreate: checkSelfPermission = " + hasReadContactPermission);
+
+        if(hasReadContactPermission == PackageManager.PERMISSION_GRANTED){
+            Log.d(TAG, "onCreate: permission granted");
+            READ_CONTACTS_GRANTED = true;
+        } else {
+            Log.d(TAG, "onCreate: requesting permission");
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.READ_CONTACTS}, 1);
+        }
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("Range")
             @Override
@@ -74,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "fab onClick: ends");
             }
         });
-        ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_CONTACTS}, 1);
+        //ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_CONTACTS}, 1);
     }
 
     @Override
