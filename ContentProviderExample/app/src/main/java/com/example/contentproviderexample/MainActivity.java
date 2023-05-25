@@ -24,6 +24,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.contentproviderexample.databinding.ActivityMainBinding;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ import java.util.List;
 import static android.Manifest.permission.READ_CONTACTS;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int REQUEST_CODE_READ_CONTACTS = 1;
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
 
@@ -69,28 +71,50 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "fab onClick: starts");
-                String[] projection = {ContactsContract.Contacts.DISPLAY_NAME_PRIMARY};
-                ContentResolver contentResolver = getContentResolver();
-                Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI,
-                        projection,
-                        null,
-                        null,
-                        ContactsContract.Contacts.DISPLAY_NAME_PRIMARY);
+                if(READ_CONTACTS_GRANTED){
+                    String[] projection = {ContactsContract.Contacts.DISPLAY_NAME_PRIMARY};
+                    ContentResolver contentResolver = getContentResolver();
+                    Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI,
+                            projection,
+                            null,
+                            null,
+                            ContactsContract.Contacts.DISPLAY_NAME_PRIMARY);
 
-                if (cursor != null) {
-                    List<String> contacts = new ArrayList<>();
-                    while (cursor.moveToNext()) {
-                        contacts.add(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY)));
+                    if (cursor != null) {
+                        List<String> contacts = new ArrayList<>();
+                        while (cursor.moveToNext()) {
+                            contacts.add(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY)));
+                        }
+                        cursor.close();
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.this, R.layout.contact_detail, R.id.name, contacts);
+                        contactNames.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
                     }
-                    cursor.close();
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.this, R.layout.contact_detail, R.id.name, contacts);
-                    contactNames.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
+                    Log.d(TAG, "fab onClick: ends");
+                }else{
+                    Snackbar.make(view, "Please grant access to your Contacts", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
                 }
-                Log.d(TAG, "fab onClick: ends");
             }
         });
         //ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_CONTACTS}, 1);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.d(TAG, "onRequestPermissionsResult: starts");
+        switch (requestCode) {
+            case REQUEST_CODE_READ_CONTACTS: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "onRequestPermissionsResult: permission granted");
+                    READ_CONTACTS_GRANTED = true;
+                } else {
+                    Log.d(TAG, "onRequestPermissionsResult: permission refused");
+                }
+            }
+        }
+        Log.d(TAG, "onRequestPermissionsResult: ends");
     }
 
     @Override
