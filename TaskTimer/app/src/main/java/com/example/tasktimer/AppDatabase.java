@@ -5,6 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+// The only class that should use this is {@link AppProvider}.
+
 class AppDatabase extends SQLiteOpenHelper {
     private static final String TAG = "AppDatabase";
 
@@ -44,6 +46,13 @@ class AppDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        Log.d(TAG, "onUpgrade: starts");
+        switch(oldVersion) {
+            case 1:
+                break;
+            default:
+                throw new IllegalStateException("onUpgrade() with unknown newVersion: " + newVersion);
+        }
+        Log.d(TAG, "onUpgrade: ends");
     }
 }
