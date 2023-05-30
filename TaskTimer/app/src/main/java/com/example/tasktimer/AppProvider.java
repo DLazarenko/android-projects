@@ -37,12 +37,12 @@ public class AppProvider extends ContentProvider {
 
         matcher.addURI(CONTENT_AUTHORITY, TasksContract.TABLE_NAME, TASKS);
         matcher.addURI(CONTENT_AUTHORITY, TasksContract.TABLE_NAME + "/#", TASKS_ID);
-
-        matcher.addURI(CONTENT_AUTHORITY, TimingsContract.TABLE_NAME, TIMINGS);
-        matcher.addURI(CONTENT_AUTHORITY, TimingsContract.TABLE_NAME + "/#", TIMINGS_ID);
-
-        matcher.addURI(CONTENT_AUTHORITY, DurationsContract.TABLE_NAME, TASK_DURATIONS);
-        matcher.addURI(CONTENT_AUTHORITY, DurationsContract.TABLE_NAME + "/#", TASK_DURATIONS_ID);
+//
+//        matcher.addURI(CONTENT_AUTHORITY, TimingsContract.TABLE_NAME, TIMINGS);
+//        matcher.addURI(CONTENT_AUTHORITY, TimingsContract.TABLE_NAME + "/#", TIMINGS_ID);
+//
+//        matcher.addURI(CONTENT_AUTHORITY, DurationsContract.TABLE_NAME, TASK_DURATIONS);
+//        matcher.addURI(CONTENT_AUTHORITY, DurationsContract.TABLE_NAME + "/#", TASK_DURATIONS_ID);
 
         return matcher;
     }
@@ -50,7 +50,7 @@ public class AppProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         mOpenHelper = AppDatabase.getInstance(getContext());
-        return false;
+        return true;
     }
 
     @Nullable
@@ -62,39 +62,43 @@ public class AppProvider extends ContentProvider {
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 
-        switch(match) {
+        switch (match) {
             case TASKS:
                 queryBuilder.setTables(TasksContract.TABLE_NAME);
                 break;
+
             case TASKS_ID:
                 queryBuilder.setTables(TasksContract.TABLE_NAME);
                 long taskId = TasksContract.getTaskId(uri);
                 queryBuilder.appendWhere(TasksContract.Columns._ID + " = " + taskId);
                 break;
-            case TIMINGS:
-                queryBuilder.setTables(TimingsContract.TABLE_NAME);
-                break;
-            case TIMINGS_ID:
-                queryBuilder.setTables(TimingsContract.TABLE_NAME);
-                long timingId = TimingsContract.getTimingId(uri);
-                queryBuilder.appendWhere(TimingsContract.Columns._ID + " = " + timingId);
-                break;
-            case TASK_DURATIONS:
-                queryBuilder.setTables(DurationsContract.TABLE_NAME);
-                break;
-            case TIMINGS_ID:
-                queryBuilder.setTables(DurationsContract.TABLE_NAME);
-                long durationId = DurationsContract.getDuration(uri);
-                queryBuilder.appendWhere(DurationsContract.Columns._ID + " = " + durationId);
-                break;
+
+//            case TIMINGS:
+//                queryBuilder.setTables(TimingsContract.TABLE_NAME);
+//                break;
+//
+//            case TIMINGS_ID:
+//                queryBuilder.setTables(TimingsContract.TABLE_NAME);
+//                long timingId = TimingsContract.getTimingId(uri);
+//                queryBuilder.appendWhere(TimingsContract.Columns._ID + " = " + timingId);
+//                break;
+//
+//            case TASK_DURATIONS:
+//                queryBuilder.setTables(DurationsContract.TABLE_NAME);
+//                break;
+//
+//            case TIMINGS_ID:
+//                queryBuilder.setTables(DurationsContract.TABLE_NAME);
+//                long durationId = DurationsContract.getDuration(uri);
+//                queryBuilder.appendWhere(DurationsContract.Columns._ID + " = " + durationId);
+//                break;
 
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
 
         SQLiteDatabase db = mOpenHelper.getReadableDatabase();
-        Cursor cursor = queryBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
-        return null;
+        return queryBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
     }
 
     @Nullable
