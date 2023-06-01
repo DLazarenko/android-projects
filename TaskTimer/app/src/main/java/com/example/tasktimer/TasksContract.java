@@ -21,6 +21,7 @@ public class TasksContract {
             // private constructor to prevent instantiation
         }
     }
+
     //  The URI to access the Tasks table
     public static final Uri CONTENT_URI = Uri.withAppendedPath(CONTENT_AUTHORITY_URI, TABLE_NAME);
 

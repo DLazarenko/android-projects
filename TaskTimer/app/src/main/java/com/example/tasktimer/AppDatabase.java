@@ -16,18 +16,19 @@ class AppDatabase extends SQLiteOpenHelper {
     // Implement AppDatabase as a Singleton
     private static AppDatabase instance = null;
 
-    private AppDatabase(Context context){
+    private AppDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        Log.d(TAG, "AppDatabase: ");
+        Log.d(TAG, "AppDatabase: constructor");
     }
 
     static AppDatabase getInstance(Context context) {
-        if(instance == null) {
+        if (instance == null) {
             Log.d(TAG, "getInstance: creating new instance");
             instance = new AppDatabase(context);
         }
         return instance;
     }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         Log.d(TAG, "onCreate: starts");
@@ -47,7 +48,7 @@ class AppDatabase extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.d(TAG, "onUpgrade: starts");
-        switch(oldVersion) {
+        switch (oldVersion) {
             case 1:
                 break;
             default:

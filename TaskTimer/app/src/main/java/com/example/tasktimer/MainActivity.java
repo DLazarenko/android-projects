@@ -1,23 +1,17 @@
 package com.example.tasktimer;
-
 import android.content.ContentResolver;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-
 import com.google.android.material.snackbar.Snackbar;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.util.Log;
 import android.view.View;
-
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-
 import com.example.tasktimer.databinding.ActivityMainBinding;
-
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -26,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +30,27 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
 
-        String[] projection = {TasksContract.Columns.TASKS_NAME, TasksContract.Columns.TASKS_DESCRIPTION};
+        AppDatabase appDatabase = AppDatabase.getInstance(this);
+        final SQLiteDatabase db = appDatabase.getReadableDatabase();
+
+        String[] projection = {TasksContract.Columns._ID,
+                TasksContract.Columns.TASKS_NAME,
+                TasksContract.Columns.TASKS_DESCRIPTION,
+                TasksContract.Columns.TASKS_SORTORDER};
         ContentResolver contentResolver = getContentResolver();
+//
+//        ContentValues values = new ContentValues();
+//        values.put(TasksContract.Columns.TASKS_NAME, "Content Provider");
+//        values.put(TasksContract.Columns.TASKS_DESCRIPTION, "Record content provider video");
+//        int count = contentResolver.update(TasksContract.buildTaskUri(2), values, null, null);
+//        Log.d(TAG, "onCreate: " + count + " record(s) updated");
+//        values.put(TasksContract.Columns.TASKS_NAME, "New Task 1");
+//        values.put(TasksContract.Columns.TASKS_DESCRIPTION, "Description 1");
+//        values.put(TasksContract.Columns.TASKS_SORTORDER, 2);
+//        Uri uri = contentResolver.insert(TasksContract.CONTENT_URI, values);
+
         Cursor cursor = contentResolver.query(TasksContract.CONTENT_URI,
+//        Cursor cursor = contentResolver.query(TasksContract.buildTaskUri(2),
                 projection,
                 null,
                 null,
@@ -56,8 +67,6 @@ public class MainActivity extends AppCompatActivity {
             cursor.close();
         }
 
-//        AppDatabase appDatabase = AppDatabase.getInstance(this);
-//        final SQLiteDatabase db = appDatabase.getReadableDatabase();
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
