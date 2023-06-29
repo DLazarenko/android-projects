@@ -3,17 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <ImageButton
         android:id="@+id/tli_edit_ii"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:contentDescription="@string/edit_button_description"
         app:layout_constraintEnd_toStartOf="@+id/tli_delete_ii"
-        app:layout_constraintStart_toEndOf="@+id/tli_name_ii"
         app:layout_constraintTop_toTopOf="@+id/tli_delete_ii"
         app:srcCompat="@android:drawable/ic_menu_edit" />
 
@@ -30,24 +28,30 @@
 
     <TextView
         android:id="@+id/tli_name_ii"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:text="TaskTimer Application"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textColor="@color/design_default_color_primary"
         android:textSize="22sp"
+        app:layout_constraintEnd_toStartOf="@+id/tli_edit_ii"
+        app:layout_constraintHorizontal_bias="0.17"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tli_description_ii"
-        android:layout_width="234dp"
-        android:layout_height="37dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:text="Write courses notes and video for the TaskTimer Application"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tli_edit_ii"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tli_name_ii" />
 </androidx.constraintlayout.widget.ConstraintLayout>
